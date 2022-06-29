@@ -1,4 +1,6 @@
 package ec.edu.ups.entidades;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,20 +22,22 @@ public class Cuenta implements Serializable {
     private String correo;
     private String contrasena;
 
-    @Transient
-    private boolean editable;
 
     @OneToOne
     @JoinColumn
+    @JsonIgnore
     private Usuario usuario;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cuenta")
+    @JsonIgnore
     private List<TarjetaCredito> tarjetaC = new ArrayList<TarjetaCredito>();
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cuentaPedido")
+    @JsonIgnore
     private List<Pedido> pedido = new ArrayList<Pedido>();
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cuentaFactura")
+    @JsonIgnore
     private List<Factura> factura = new ArrayList<Factura>();
 
     public Cuenta() {
@@ -100,13 +104,7 @@ public class Cuenta implements Serializable {
     }
 
 
-    public boolean isEditable() {
-        return editable;
-    }
 
-    public void setEditable(boolean editable) {
-        this.editable = editable;
-    }
 
     public List<Factura> getFactura() {
         return factura;
