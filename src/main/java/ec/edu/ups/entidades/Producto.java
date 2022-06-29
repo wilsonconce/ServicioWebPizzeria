@@ -16,19 +16,46 @@ import java.util.Objects;
 @Table(name = "producto")
 public class Producto implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="codigo_producto")
     private int codigoProducto;
+
     private String nombre;
     private String descripcion;
     private double precio;
+    //private byte imagen;
     private int stock;
+
 
     @ManyToOne
     @JoinColumn
     @JsonIgnore
     private CategoriaProducto categoria;
+
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "producto")
+    @JsonIgnore
+    private DetalleFactura detalleFactura;
+
+
+    @JoinTable(name = "productos_sucursal", joinColumns = {
+            @JoinColumn(name = "codigoProducto", referencedColumnName = "codigoProducto")}, inverseJoinColumns = {
+            @JoinColumn(name = "codigo_sucursal", referencedColumnName = "codigo")
+    })
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Sucursal> listaSucursal = new ArrayList<Sucursal>();
+
+    public Producto(String nombre, String descripcion, double precio, int stock, CategoriaProducto categoria) {
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.precio = precio;
+        //this.imagen = imagen;
+        this.stock = stock;
+        this.categoria = categoria;
+        listaSucursal = new ArrayList<Sucursal>();
+    }
 
     public Producto() {
     }
@@ -65,6 +92,12 @@ public class Producto implements Serializable {
         this.precio = precio;
     }
 
+    /**
+     * public byte getImagen() { return imagen; }
+     *
+     * public void setImagen(byte imagen) { this.imagen = imagen; }
+     *
+     */
     public int getStock() {
         return stock;
     }
@@ -81,6 +114,27 @@ public class Producto implements Serializable {
         this.categoria = categoria;
     }
 
+    public DetalleFactura getDetalleFactura() {
+        return detalleFactura;
+    }
+
+    public void setDetalleFactura(DetalleFactura detalleFactura) {
+        this.detalleFactura = detalleFactura;
+    }
+
+
+    public List<Sucursal> getListaSucursal() {
+        return listaSucursal;
+    }
+
+    public void setListaSucursal(List<Sucursal> listaSucursal) {
+        this.listaSucursal = listaSucursal;
+    }
+
+    public void addProducto(Sucursal su){
+        this.listaSucursal.add(su);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -94,18 +148,7 @@ public class Producto implements Serializable {
         return Objects.hash(codigoProducto);
     }
 
-    @Override
-    public String toString() {
-        return "Producto{" +
-                "codigoProducto=" + codigoProducto +
-                ", nombre='" + nombre + '\'' +
-                ", descripcion='" + descripcion + '\'' +
-                ", precio=" + precio +
-                ", stock=" + stock +
-                '}';
-    }
 
-    /*
     @Override
     public String toString() {
         String u = ",Categoria==(null)";
@@ -113,6 +156,5 @@ public class Producto implements Serializable {
             u = ", Categoria=(" + this.categoria.getCodigoCategoria() + ")";
         }
         return "Producto{" + "codigoProducto=" + codigoProducto + ", nombre=" + nombre + ", descripcion=" + descripcion + ", precio=" + precio + ", stock=" + stock + u + ", detalleFactura=" + detalleFactura + '}';
-    }*/
-
+    }
 }

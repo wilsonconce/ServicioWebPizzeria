@@ -1,38 +1,23 @@
-package ec.edu.ups.entidades;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+package ec.edu.ups.entidades.peticiones.tarjetacredito;
 
-import javax.persistence.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Date;
 
-/**
- *
- * @author johan
- */
-@Entity
-public class TarjetaCredito {
+public class CrearTarjeta {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int idTarjeta;
+    @JsonProperty
     private String numeroTarjeta;
+    @JsonProperty
     private Date fechaCa;
+    @JsonProperty
     private String codigoSegu;
+    @JsonProperty
     private String nombreTarj;
+    @JsonProperty
+    private int codigoCuenta;
 
-    @ManyToOne
-    @JoinColumn
-    @JsonIgnore
-    private Cuenta cuenta;
-
-    public TarjetaCredito() {
-    }
-
-    public TarjetaCredito(String numeroTarjeta, Date fechaCa, String codigoSegu, String nombreTarj, Cuenta cuenta) {
-        this.numeroTarjeta = numeroTarjeta;
-        this.fechaCa = fechaCa;
-        this.codigoSegu = codigoSegu;
-        this.nombreTarj = nombreTarj;
-        this.cuenta = cuenta;
+    public CrearTarjeta() {
     }
 
     public String getNumeroTarjeta() {
@@ -67,13 +52,11 @@ public class TarjetaCredito {
         this.nombreTarj = nombreTarj;
     }
 
-    public Cuenta getCuenta() {
-        return cuenta;
+    public int getCodigoCuenta() {
+        return codigoCuenta;
     }
 
-    public void setCuenta(Cuenta cuenta) {
-        this.cuenta = cuenta;
+    public void setCodigoCuenta(int codigoCuenta) {
+        this.codigoCuenta = codigoCuenta;
     }
-
 }
-

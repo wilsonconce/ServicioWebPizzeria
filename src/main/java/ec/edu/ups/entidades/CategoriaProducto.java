@@ -9,12 +9,11 @@ import java.util.Objects;
  * @author johan
  */
 @Entity
-@Table(name = "categoria_producto")
+
 public class CategoriaProducto implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "codigo_categoria")
     private int codigoCategoria;
     private String nombre;
     private String descripcion;
@@ -75,16 +74,7 @@ public class CategoriaProducto implements Serializable {
         return Objects.hash(codigoCategoria, nombre);
     }
 
-    @Override
-    public String toString() {
-        return "CategoriaProducto{" +
-                "codigoCategoria=" + codigoCategoria +
-                ", nombre='" + nombre + '\'' +
-                ", descripcion='" + descripcion + '\'' +
-                '}';
-    }
 
-    /*
     @Override
     public String toString() {
         String u = ",sucursalCategoria==(null)";
@@ -94,5 +84,5 @@ public class CategoriaProducto implements Serializable {
             d = ", producto=" + this.productos.toString() + ")";
         }
         return "CategoriaSucursal{" + "codigoCategoria=" + codigoCategoria + ", nombre=" + nombre + ", descripcion=" + descripcion + u + d + '}';
-    }*/
+    }
 }

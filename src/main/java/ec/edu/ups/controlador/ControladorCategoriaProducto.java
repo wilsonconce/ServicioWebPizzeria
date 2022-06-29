@@ -25,8 +25,9 @@ public class ControladorCategoriaProducto {
 
     @GetMapping("categoriaproducto/{nombre}")
     public ResponseEntity<CategoriaProducto> getCategoriaProductoByNombre(@PathVariable String nombre){
-        Optional<CategoriaProducto> categoriaProductoOptional = Optional.ofNullable(categoriaProductoServicio.retriveCategoriaProductoByNombre(nombre));
-        CategoriaProducto categoriaProducto = categoriaProductoOptional.orElseThrow(DatoNoEncontrado::new);
+        System.out.println(nombre);
+        CategoriaProducto categoriaProducto = categoriaProductoServicio.retriveCategoriaProductoByNombre(nombre);
+        System.out.println(categoriaProducto);
         return new ResponseEntity<CategoriaProducto>(categoriaProducto, HttpStatus.OK);
     }
 

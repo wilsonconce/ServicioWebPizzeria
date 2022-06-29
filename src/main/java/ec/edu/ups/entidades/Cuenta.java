@@ -29,7 +29,7 @@ public class Cuenta implements Serializable {
     private Usuario usuario;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cuenta")
-    @JsonIgnore
+
     private List<TarjetaCredito> tarjetaC = new ArrayList<TarjetaCredito>();
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cuentaPedido")
