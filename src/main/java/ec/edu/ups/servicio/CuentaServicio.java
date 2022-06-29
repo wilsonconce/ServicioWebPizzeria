@@ -17,6 +17,8 @@ public class CuentaServicio {
     public Optional<Cuenta> findByCodigo(int codigo){
         return (Optional<Cuenta>)cuentaRepositorio.findById(codigo);
     }
-
+    public Optional<Cuenta> findByCorreo(String correo){
+        return (Optional<Cuenta>)cuentaRepositorio.findCuentaByCorreo(correo);
+    }
     public void save(Cuenta cuenta){cuentaRepositorio.save(cuenta);}
 }
