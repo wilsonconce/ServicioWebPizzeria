@@ -1,56 +1,34 @@
 package ec.edu.ups.entidades;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  *
  * @author johan
  */
 @Entity
+@Table(name = "producto")
 public class Producto implements Serializable {
-
-    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name="codigo_producto")
     private int codigoProducto;
-
     private String nombre;
     private String descripcion;
     private double precio;
-    //private byte imagen;
     private int stock;
-
-    @Transient
-    private boolean editable;
 
     @ManyToOne
     @JoinColumn
+    @JsonIgnore
     private CategoriaProducto categoria;
-
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "producto")
-    private DetalleFactura detalleFactura;
-
-
-    @JoinTable(name = "productos_sucursal", joinColumns = {
-            @JoinColumn(name = "codigoProducto", referencedColumnName = "codigoProducto")}, inverseJoinColumns = {
-            @JoinColumn(name = "codigo_sucursal", referencedColumnName = "codigo")
-    })
-    @ManyToMany(cascade = CascadeType.ALL)
-    private List<Sucursal> listaSucursal = new ArrayList<Sucursal>();
-
-    public Producto(String nombre, String descripcion, double precio, int stock, CategoriaProducto categoria) {
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.precio = precio;
-        //this.imagen = imagen;
-        this.stock = stock;
-        this.categoria = categoria;
-        listaSucursal = new ArrayList<Sucursal>();
-    }
 
     public Producto() {
     }
@@ -87,12 +65,6 @@ public class Producto implements Serializable {
         this.precio = precio;
     }
 
-    /**
-     * public byte getImagen() { return imagen; }
-     *
-     * public void setImagen(byte imagen) { this.imagen = imagen; }
-     *
-     */
     public int getStock() {
         return stock;
     }
@@ -109,38 +81,31 @@ public class Producto implements Serializable {
         this.categoria = categoria;
     }
 
-    public DetalleFactura getDetalleFactura() {
-        return detalleFactura;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Producto producto = (Producto) o;
+        return codigoProducto == producto.codigoProducto;
     }
 
-    public void setDetalleFactura(DetalleFactura detalleFactura) {
-        this.detalleFactura = detalleFactura;
+    @Override
+    public int hashCode() {
+        return Objects.hash(codigoProducto);
     }
 
-    public boolean isEditable() {
-        return editable;
+    @Override
+    public String toString() {
+        return "Producto{" +
+                "codigoProducto=" + codigoProducto +
+                ", nombre='" + nombre + '\'' +
+                ", descripcion='" + descripcion + '\'' +
+                ", precio=" + precio +
+                ", stock=" + stock +
+                '}';
     }
 
-    public void setEditable(boolean editable) {
-        this.editable = editable;
-    }
-
-    public List<Sucursal> getListaSucursal() {
-        return listaSucursal;
-    }
-
-    public void setListaSucursal(List<Sucursal> listaSucursal) {
-        this.listaSucursal = listaSucursal;
-    }
-
-    public void addProducto(Sucursal su){
-        this.listaSucursal.add(su);
-    }
-
-
-
-
-
+    /*
     @Override
     public String toString() {
         String u = ",Categoria==(null)";
@@ -148,6 +113,6 @@ public class Producto implements Serializable {
             u = ", Categoria=(" + this.categoria.getCodigoCategoria() + ")";
         }
         return "Producto{" + "codigoProducto=" + codigoProducto + ", nombre=" + nombre + ", descripcion=" + descripcion + ", precio=" + precio + ", stock=" + stock + u + ", detalleFactura=" + detalleFactura + '}';
-    }
+    }*/
 
 }

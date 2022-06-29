@@ -1,28 +1,26 @@
 package ec.edu.ups.entidades;
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  *
  * @author johan
  */
 @Entity
+@Table(name = "categoria_producto")
 public class CategoriaProducto implements Serializable {
-
-    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "codigo_categoria")
     private int codigoCategoria;
     private String nombre;
     private String descripcion;
-    @Transient
-    private boolean editable;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "categoria")
-    private List<Producto> producto = new ArrayList<Producto>();
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "categoria", cascade = CascadeType.ALL)
+    private List<Producto> productos;
 
     public CategoriaProducto() {
     }
@@ -30,7 +28,6 @@ public class CategoriaProducto implements Serializable {
     public CategoriaProducto(String nombre, String descripcion) {
         this.nombre = nombre;
         this.descripcion = descripcion;
-
     }
 
     public int getCodigoCategoria() {
@@ -57,31 +54,45 @@ public class CategoriaProducto implements Serializable {
         this.descripcion = descripcion;
     }
 
-    public List<Producto> getProducto() {
-        return producto;
+    public List<Producto> getProductos() {
+        return productos;
     }
 
-    public void setProducto(List<Producto> producto) {
-        this.producto = producto;
+    public void setProductos(List<Producto> productos) {
+        this.productos = productos;
     }
 
-    public boolean isEditable() {
-        return editable;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CategoriaProducto categoriaProducto = (CategoriaProducto) o;
+        return codigoCategoria == categoriaProducto.codigoCategoria && Objects.equals(nombre, categoriaProducto.nombre);
     }
 
-    public void setEditable(boolean editable) {
-        this.editable = editable;
+    @Override
+    public int hashCode() {
+        return Objects.hash(codigoCategoria, nombre);
     }
 
     @Override
     public String toString() {
-        String u = ",sucursalCategoria==(null)";
-
-        String d = ", producto=(null)";
-        if (this.producto != null) {
-            d = ", producto=" + this.producto.toString() + ")";
-        }
-        return "CategoriaSucursal{" + "codigoCategoria=" + codigoCategoria + ", nombre=" + nombre + ", descripcion=" + descripcion + u + d + '}';
+        return "CategoriaProducto{" +
+                "codigoCategoria=" + codigoCategoria +
+                ", nombre='" + nombre + '\'' +
+                ", descripcion='" + descripcion + '\'' +
+                '}';
     }
 
+    /*
+    @Override
+    public String toString() {
+        String u = ",sucursalCategoria==(null)";
+
+        String d = ", productos=(null)";
+        if (this.productos != null) {
+            d = ", producto=" + this.productos.toString() + ")";
+        }
+        return "CategoriaSucursal{" + "codigoCategoria=" + codigoCategoria + ", nombre=" + nombre + ", descripcion=" + descripcion + u + d + '}';
+    }*/
 }
