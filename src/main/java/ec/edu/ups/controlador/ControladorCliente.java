@@ -4,6 +4,7 @@ import ec.edu.ups.entidades.Cuenta;
 import ec.edu.ups.entidades.TipoUsuario;
 import ec.edu.ups.entidades.Usuario;
 import ec.edu.ups.entidades.peticiones.cliente.RegistraCliente;
+import ec.edu.ups.entidades.peticiones.cuenta.ModificarCuenta;
 import ec.edu.ups.servicio.ClienteServicio;
 import ec.edu.ups.servicio.CuentaServicio;
 import ec.edu.ups.servicio.TipoUsuarioServicio;
@@ -13,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
+
 @RestController
 public class ControladorCliente {
 
@@ -56,6 +59,17 @@ public class ControladorCliente {
         clienteServicio.save(usuario);
         return ResponseEntity.ok(usuario);
 
+    }
+    @PutMapping("/cuenta/edit")
+    public ResponseEntity <Cuenta> updatePersona(@RequestBody ModificarCuenta modificarCuenta) {
+        Optional<Cuenta> cuentaOptional = this.cuentaServicio.findByCodigo(modificarCuenta.getCodigoCuenta());
+        if(cuentaOptional.isEmpty()){
+            return ResponseEntity.badRequest().build();
+        }
+        Cuenta cuenta=cuentaOptional.get();
+        cuenta.setContrasena(modificarCuenta.getContrasena());
+        this.cuentaServicio.save(cuenta);
+        return ResponseEntity.ok(cuenta);
     }
     @GetMapping("/clientes")
     public ResponseEntity<List<Usuario>> getAllPersona(){

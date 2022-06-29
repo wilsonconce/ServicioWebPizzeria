@@ -16,4 +16,9 @@ public class TarjetaCreditoServicio {
         return (Optional<TarjetaCredito>)tarjetaCreditoRepositorio.findById(codigo);
     }
     public void save(TarjetaCredito tarjetaCredito){tarjetaCreditoRepositorio.save(tarjetaCredito);}
+
+    public void delete(int codigo){
+        tarjetaCreditoRepositorio.deleteById(codigo);
+
+    }
 }

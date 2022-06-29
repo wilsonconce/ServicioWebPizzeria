@@ -54,6 +54,10 @@ public class ControladorTarjetaCredito {
         Cuenta cuenta=personaOptional.orElseThrow(CuentaNoEncontradaException::new);
         return new ResponseEntity<Cuenta>(cuenta, HttpStatus.OK);
     }
-
+    @DeleteMapping("/tarjeta/delete/{codigo}")
+    public ResponseEntity<String> deletePersona(@PathVariable int codigo) {
+        this.tarjetaCreditoServicio.delete(codigo);
+        return ResponseEntity .ok("Tarjeta de Credito Eliminada correctamente");
+    }
 
 }
