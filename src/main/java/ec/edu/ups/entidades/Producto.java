@@ -28,7 +28,6 @@ public class Producto implements Serializable {
     //private byte imagen;
     private int stock;
 
-
     @ManyToOne
     @JoinColumn
     @JsonIgnore
@@ -38,14 +37,14 @@ public class Producto implements Serializable {
     @JsonIgnore
     private DetalleFactura detalleFactura;
 
-
     @JoinTable(name = "productos_sucursal", joinColumns = {
             @JoinColumn(name = "codigoProducto", referencedColumnName = "codigoProducto")}, inverseJoinColumns = {
             @JoinColumn(name = "codigo_sucursal", referencedColumnName = "codigo")
     })
+
     @ManyToMany(cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<Sucursal> listaSucursal = new ArrayList<Sucursal>();
+    private List<Sucursal> listaSucursal;
 
     public Producto(String nombre, String descripcion, double precio, int stock, CategoriaProducto categoria) {
         this.nombre = nombre;
@@ -122,6 +121,9 @@ public class Producto implements Serializable {
         this.detalleFactura = detalleFactura;
     }
 
+    public void addProducto(Sucursal su){
+        this.listaSucursal.add(su);
+    }
 
     public List<Sucursal> getListaSucursal() {
         return listaSucursal;
@@ -129,10 +131,6 @@ public class Producto implements Serializable {
 
     public void setListaSucursal(List<Sucursal> listaSucursal) {
         this.listaSucursal = listaSucursal;
-    }
-
-    public void addProducto(Sucursal su){
-        this.listaSucursal.add(su);
     }
 
     @Override
@@ -147,7 +145,6 @@ public class Producto implements Serializable {
     public int hashCode() {
         return Objects.hash(codigoProducto);
     }
-
 
     @Override
     public String toString() {

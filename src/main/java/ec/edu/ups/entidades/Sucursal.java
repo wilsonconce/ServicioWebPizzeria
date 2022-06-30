@@ -12,12 +12,9 @@ import javax.persistence.*;
 @Entity
 public class Sucursal implements Serializable{
 
-    private static final long serialVersionUID = 1L;
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int codigo;
-
     private String nombre;
     private String direccion;
     private double latencia;
@@ -26,15 +23,10 @@ public class Sucursal implements Serializable{
     @OneToMany(cascade=CascadeType.ALL, mappedBy = "sucursal")
     private List<Pedido> pedido = new ArrayList<Pedido>();
 
-    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "listaSucursal")
-    private List<Producto> listaProductos = new ArrayList<Producto>();
-
-
-    @Transient
-    private boolean editable;
+    @ManyToMany(fetch = FetchType.LAZY,mappedBy = "listaSucursal", cascade = CascadeType.ALL)
+    private List<Producto> listaProductos;
 
     public Sucursal() {
-
     }
 
     public Sucursal(String nombre, String direccion, double latencia, double longitud) {
@@ -45,19 +37,9 @@ public class Sucursal implements Serializable{
         listaProductos = new ArrayList<Producto>();
     }
 
-    public List<Producto> getListaProductos() {
-        return listaProductos;
-    }
-
-    public void setListaProductos(List<Producto> listaProductos) {
-        this.listaProductos = listaProductos;
-    }
-
     public void addSucursal(Producto p){
         this.listaProductos.add(p);
     }
-
-
 
     public String getNombre() {
         return nombre;
@@ -91,8 +73,6 @@ public class Sucursal implements Serializable{
         this.longitud = longitud;
     }
 
-
-
     public int getCodigo() {
         return codigo;
     }
@@ -109,15 +89,13 @@ public class Sucursal implements Serializable{
         this.pedido = pedido;
     }
 
-    public boolean isEditable() {
-        return editable;
+    public List<Producto> getListaProductos() {
+        return listaProductos;
     }
 
-    public void setEditable(boolean editable) {
-        this.editable = editable;
+    public void setListaProductos(List<Producto> listaProductos) {
+        this.listaProductos = listaProductos;
     }
-
-
 
     @Override
     public String toString() {
