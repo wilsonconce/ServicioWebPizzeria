@@ -22,6 +22,7 @@ public class PedidoDetalle implements Serializable {
 
     @OneToOne
     @JoinColumn
+    @JsonIgnore
     private Producto producto;
     @JsonIgnore
     @ManyToOne

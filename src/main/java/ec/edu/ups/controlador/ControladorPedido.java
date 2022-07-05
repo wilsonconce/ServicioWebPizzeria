@@ -239,7 +239,7 @@ public class ControladorPedido {
         PedidoDetalle pedidoDetalle = new PedidoDetalle();
 
         Producto producto=productoServicio.retriveProductoByNombre(ingresarPedidoDetalle.getNombreProducto());
-        descripcion = ingresarPedidoDetalle.getDescripcion();
+        descripcion = producto.getNombre();
         cantidad = ingresarPedidoDetalle.getCantidad();
         precioUnitario = producto.getPrecio();
         stock =producto.getStock();
@@ -273,7 +273,7 @@ public class ControladorPedido {
 
 
         pedidoDetalle.setDescripcion(descripcion);
-        pedidoDetalle.setProducto(producto);
+        //pedidoDetalle.setProducto(producto);
         pedidoDetalle.setCantidad(cantidad);
         pedidoDetalle.setPrecioUnitario(precioUnitario);
         pedidoDetalle.setPrecioTotal(precioTotal);
@@ -284,7 +284,7 @@ public class ControladorPedido {
         detalleFactura.setDescripcion(descripcion);
         detalleFactura.setPrecioUnitario(precioUnitario);
         detalleFactura.setPrecioTotal(precioTotal);
-        detalleFactura.setProducto(producto);
+        //detalleFactura.setProducto(producto);
 
         for (int i = 0; i < detalles.size(); i++) {
             subtotal = subtotal + detalles.get(i).getPrecioTotal();

@@ -23,6 +23,7 @@ public class DetalleFactura implements Serializable{
 
     @OneToOne
     @JoinColumn
+    @JsonIgnore
     private Producto producto;
 
     @ManyToOne
