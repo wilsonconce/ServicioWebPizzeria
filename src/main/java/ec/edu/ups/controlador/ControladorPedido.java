@@ -237,20 +237,19 @@ public class ControladorPedido {
 
         DetalleFactura detalleFactura = new DetalleFactura();
         PedidoDetalle pedidoDetalle = new PedidoDetalle();
-        Producto producto = new Producto();
 
-        codigoPro = productoServicio.codigoPorNombre(ingresarPedidoDetalle.getNombreProducto());
+        Producto producto=productoServicio.retriveProductoByNombre(ingresarPedidoDetalle.getNombreProducto());
         descripcion = ingresarPedidoDetalle.getDescripcion();
         cantidad = ingresarPedidoDetalle.getCantidad();
-        precioUnitario = productoServicio.precioPorID(codigoPro);
-        stock = productoServicio.stockPorId(codigoPro);
+        precioUnitario = producto.getPrecio();
+        stock =producto.getStock();
 
-        if (productos != null) {
+        //if (productos != null) {
 
-            producto = productoServicio.retriveProductoByNombre(productos);
+            //producto = productoServicio.retriveProductoByNombre(productos);
             System.out.println("El producto es: !!!!  " + producto.getNombre());
 
-        }
+        //}
         //Probando hasta donde llega
 
         System.out.println(" pRODUCRTTO STOCK: " + stock);
@@ -431,21 +430,17 @@ public class ControladorPedido {
         System.out.println("Puto COdigo de factura: "+fac.getCodigoFactura());
         pedido.setPedidoFactura(fac);
         pedidoServicio.savePedido(pedido);
-        facturaServicio.save(fac);
 
         System.out.println("Stock Actual"+stock);
         System.out.println("Total de Factura" +total);
+        System.out.println(detalles.size());
         for (int i = 0; i < detalles.size(); i++) {
-            detalles.get(i).setFacturadetalle(fac);
-            Producto p = new Producto();
-            p = productoServicio.retriveProductoByNombre(detalles.get(i).getDescripcion());
-            stock = ingresarPedido.getStock();
-            facturaDetalleServicio.save(detalles.get(i));
-            p.setStock(p.getStock()-cantidad);
-            productoServicio.save(p);
-            System.out.println("NOmbre Producto: "+productoServicio.retriveProductoByNombre(detalles.get(i).getDescripcion()));
-            System.out.println("stock "+stock );
-
+                detalles.get(i).setFacturadetalle(fac);
+                Producto p = productoServicio.retriveProductoByNombre(detalles.get(i).getDescripcion());
+                p.setStock(p.getStock() - detalles.get(i).getCantidad());
+                facturaDetalleServicio.save(detalles.get(i));
+                productoServicio.save(p);
+                System.out.println(detalles.get(i));
         }
         System.out.println("Stock despues del for " +stock);
 

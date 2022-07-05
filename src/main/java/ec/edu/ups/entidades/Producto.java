@@ -37,6 +37,10 @@ public class Producto implements Serializable {
     @JsonIgnore
     private DetalleFactura detalleFactura;
 
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "producto")
+    @JsonIgnore
+    private PedidoDetalle detallePedido;
+
     @JoinTable(name = "productos_sucursal", joinColumns = {
             @JoinColumn(name = "codigoProducto", referencedColumnName = "codigoProducto")}, inverseJoinColumns = {
             @JoinColumn(name = "codigo_sucursal", referencedColumnName = "codigo")
@@ -131,6 +135,14 @@ public class Producto implements Serializable {
 
     public void setListaSucursal(List<Sucursal> listaSucursal) {
         this.listaSucursal = listaSucursal;
+    }
+
+    public PedidoDetalle getDetallePedido() {
+        return detallePedido;
+    }
+
+    public void setDetallePedido(PedidoDetalle detallePedido) {
+        this.detallePedido = detallePedido;
     }
 
     @Override

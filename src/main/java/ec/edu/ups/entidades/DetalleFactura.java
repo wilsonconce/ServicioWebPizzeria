@@ -1,4 +1,6 @@
 package ec.edu.ups.entidades;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 import java.io.Serializable;
@@ -25,6 +27,7 @@ public class DetalleFactura implements Serializable{
 
     @ManyToOne
     @JoinColumn
+    @JsonIgnore
     private Factura facturadetalle;
 
     public DetalleFactura() {
