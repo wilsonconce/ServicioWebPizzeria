@@ -1,8 +1,12 @@
 package ec.edu.ups.entidades;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 import java.io.Serializable;
 import java.sql.Time;
+import java.util.List;
+import java.util.Optional;
 
 /**
  *
@@ -18,27 +22,34 @@ public class Pedido implements Serializable{
     private int idPedido;
 
     private Time tiempoAprox;
-    private boolean estado;
 
+   @Enumerated(value = EnumType.ORDINAL)
+   private EstadoPedido estado;
+    @JsonIgnore
     @ManyToOne
     @JoinColumn
     private Sucursal sucursal;
 
     private double distanciaRecorrido;
     private double costoEnvio;
-
+    @JsonIgnore
     @ManyToOne
     @JoinColumn
     private Cuenta cuentaPedido;
 
-    @OneToOne
+    @JsonIgnore
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn
     private Factura pedidoFactura;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pedidoDetalle")
+    private List<PedidoDetalle> pedidoDetalle;
+
     public Pedido() {
+        estado= EstadoPedido.ENVIADO;
     }
 
-    public Pedido(Time tiempoAprox, boolean estado, Sucursal sucursal, double distanciaRecorrido, double costoEnvio, Cuenta cuentaPedido, Factura factura) {
+    public Pedido(Time tiempoAprox, EstadoPedido estado, Sucursal sucursal, double distanciaRecorrido, double costoEnvio, Cuenta cuentaPedido, Factura factura) {
         this.tiempoAprox = tiempoAprox;
         this.estado = estado;
         this.sucursal = sucursal;
@@ -57,11 +68,11 @@ public class Pedido implements Serializable{
         this.tiempoAprox = tiempoAprox;
     }
 
-    public boolean isEstado() {
+    public EstadoPedido isEstado() {
         return estado;
     }
 
-    public void setEstado(boolean estado) {
+    public void setEstado(EstadoPedido estado) {
         this.estado = estado;
     }
 
@@ -70,7 +81,7 @@ public class Pedido implements Serializable{
     }
 
     public void setSucursal(Sucursal sucursal) {
-        this.sucursal = sucursal;
+    this.sucursal = sucursal;
     }
 
     public double getDistanciaRecorrido() {
@@ -102,21 +113,45 @@ public class Pedido implements Serializable{
     }
 
     public void setCuentaPedido(Cuenta cuentaPedido) {
-        this.cuentaPedido = cuentaPedido;
+    this.cuentaPedido = cuentaPedido;
     }
 
 
-    public Factura getFactura() {
+    public Factura getPedidoFactura() {
         return pedidoFactura;
     }
 
-    public void setFactura(Factura factura) {
-        this.pedidoFactura = factura;
+    public void setPedidoFactura(Factura pedidoFactura) {
+        this.pedidoFactura = pedidoFactura;
+    }
+
+    public List<PedidoDetalle> getPedidoDetalle() {
+        return pedidoDetalle;
+    }
+
+    public void setPedidoDetalle(List<PedidoDetalle> pedidoDetalle) {
+        this.pedidoDetalle = pedidoDetalle;
+    }
+
+    public void calcularSubtotal(){
+
     }
 
     @Override
     public String toString() {
-        return "Pedido{" + "idPedido=" + idPedido + ", tiempoAprox=" + tiempoAprox + ", estado=" + estado + ", sucursal=" + sucursal + ", distanciaRecorrido=" + distanciaRecorrido + ", costoEnvio=" + costoEnvio + ", cuentaPedido=" + cuentaPedido + ", factura=" + pedidoFactura + '}';
+        String s =",sucursal==(null)";
+        String c =",cuentaPedido==(null)";
+        String d = ", pedidoDetalle=(null)";
+        if (this.pedidoDetalle != null) {
+            d = ", pedidoDetalle=" + this.pedidoDetalle.toString() + ")";
+        }
+        if (this.sucursal != null) {
+            s = ", Sucursal=(" + this.sucursal.getCodigo() + ")";
+        }
+        if (this.cuentaPedido != null) {
+            c = ", Cuenta=(" + this.cuentaPedido.getCodigoCuenta() + ")";
+        }
+        return "Pedido{" + "idPedido=" + idPedido + ", tiempoAprox=" + tiempoAprox + ", estado=" + estado + s + ", distanciaRecorrido=" + distanciaRecorrido + ", costoEnvio=" + costoEnvio  + c + d+'}';
     }
 
 

@@ -2,9 +2,6 @@ package ec.edu.ups.controlador;
 
 import ec.edu.ups.entidades.Cuenta;
 import ec.edu.ups.entidades.TarjetaCredito;
-import ec.edu.ups.entidades.TipoUsuario;
-import ec.edu.ups.entidades.Usuario;
-import ec.edu.ups.entidades.peticiones.cliente.RegistraCliente;
 import ec.edu.ups.entidades.peticiones.tarjetacredito.CrearTarjeta;
 import ec.edu.ups.servicio.CuentaNoEncontradaException;
 import ec.edu.ups.servicio.CuentaServicio;

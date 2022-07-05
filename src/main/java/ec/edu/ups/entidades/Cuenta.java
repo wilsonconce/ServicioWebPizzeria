@@ -32,7 +32,7 @@ public class Cuenta implements Serializable {
 
     private List<TarjetaCredito> tarjetaC = new ArrayList<TarjetaCredito>();
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cuentaPedido")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "cuentaPedido")
     @JsonIgnore
     private List<Pedido> pedido = new ArrayList<Pedido>();
 
@@ -54,7 +54,9 @@ public class Cuenta implements Serializable {
         this.contrasena = contrasena;
         this.usuario = usuario;
     }
-
+    public void addPedido(Pedido p){
+        this.pedido.add(p);
+    }
     public String getCorreo() {
         return correo;
     }
@@ -118,11 +120,15 @@ public class Cuenta implements Serializable {
     @Override
     public String toString() {
         String u = ",usuario=(null)";
+        String p = ", pedido=(null)";
+        if (this.pedido != null) {
+            p = ", pedido=" + this.pedido.toString() + ")";
+        }
         if (this.usuario != null) {
             u = ",UsuarioId=(" + this.usuario.getCedula() + ")";
         }
         return "Cuenta{" + "correo=" + correo + ", contrasena=" + contrasena + u +
-                ", tarjetaC=" + tarjetaC + ", pedido=" + pedido + '}';
+                ", tarjetaC=" + tarjetaC + p + '}';
     }
 
 

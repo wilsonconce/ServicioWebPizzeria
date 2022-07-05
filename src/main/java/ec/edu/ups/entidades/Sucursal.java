@@ -20,13 +20,18 @@ public class Sucursal implements Serializable{
     private double latencia;
     private double longitud;
 
-    @OneToMany(cascade=CascadeType.ALL, mappedBy = "sucursal")
+
+    @OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL, mappedBy = "sucursal")
     private List<Pedido> pedido = new ArrayList<Pedido>();
 
     @ManyToMany(fetch = FetchType.LAZY,mappedBy = "listaSucursal", cascade = CascadeType.ALL)
     private List<Producto> listaProductos;
 
     public Sucursal() {
+    }
+
+    public Sucursal(int codigo) {
+        this.codigo = codigo;
     }
 
     public Sucursal(String nombre, String direccion, double latencia, double longitud) {
@@ -37,6 +42,9 @@ public class Sucursal implements Serializable{
         listaProductos = new ArrayList<Producto>();
     }
 
+    public void addPedido(Pedido p){
+        this.pedido.add(p);
+    }
     public void addSucursal(Producto p){
         this.listaProductos.add(p);
     }

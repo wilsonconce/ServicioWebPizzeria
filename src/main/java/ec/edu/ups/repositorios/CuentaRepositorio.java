@@ -10,4 +10,10 @@ public interface CuentaRepositorio extends CrudRepository<Cuenta,Integer>{
 
     @Query("select c from Cuenta c where c.correo = :correo")
     Optional <Cuenta> findCuentaByCorreo(String correo);
+
+    @Query("select c from Cuenta c where c.correo = :correo")
+    Cuenta buscarCuentaPorCorreo(String correo);
+
+    @Query("select c.codigoCuenta from Cuenta c where c.correo =:correo")
+    Integer codigoCuentaPorCorreo(String correo);
 }

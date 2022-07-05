@@ -43,8 +43,7 @@ public class Factura implements Serializable{
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "pedidoFactura")
     private Pedido pedidoFactura;
 
-    @Transient
-    private boolean editable;
+
 
     public Factura() {
     }
@@ -139,14 +138,6 @@ public class Factura implements Serializable{
 
     public void setCuentaFactura(Cuenta cuentaFactura) {
         this.cuentaFactura = cuentaFactura;
-    }
-
-    public boolean isEditable() {
-        return editable;
-    }
-
-    public void setEditable(boolean editable) {
-        this.editable = editable;
     }
 
 

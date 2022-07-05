@@ -19,4 +19,19 @@ public class ProductoServicio {
         return (Producto) productoRepositorio.findProductoByNombre(nombre);
     }
 
+    public Double precioPorID(Integer codigoPr){
+        return productoRepositorio.findPrecioByID(codigoPr);
+    }
+
+    public Integer codigoPorNombre(String nombreP){
+        return productoRepositorio.findCodigoByName(nombreP);
+    }
+
+    public Producto productoPorCodigo(Integer codPro){
+        return (Producto) productoRepositorio.productoPorCodigo(codPro);
+    }
+    public Integer stockPorId(Integer codigoProd){
+        return productoRepositorio.stockPorCodigo(codigoProd);
+    }
+
 }
