@@ -22,6 +22,10 @@ public class ClienteServicio {
         return (Optional<Usuario>)clienteRepositorio.findByCedula(cedula);
     }
 
+    public Usuario buscarPorCedula(String cedula){
+        return (Usuario) clienteRepositorio.buscarPorCedula(cedula);
+    }
+
     public List<Usuario> findAll(){
         return (List<Usuario>) clienteRepositorio.findAll();
     }

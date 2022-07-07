@@ -37,6 +37,9 @@ public class ControladorPedido {
     private FacturaServicio facturaServicio;
 
     private FacturaDetalleServicio facturaDetalleServicio;
+
+
+
     private String productos;
 
     private String descripcion;
@@ -343,10 +346,12 @@ public class ControladorPedido {
         double formulaTiempo;
         Sucursal sucu = new Sucursal();
         Cuenta cue = new Cuenta();
+        Usuario usua = new Usuario();
         latidudSucu = sucursalServicio.latitudPorNombre(ingresarPedido.getSucursalNombre());
         longitudSucu = sucursalServicio.longitudPorNombre(ingresarPedido.getSucursalNombre());
         distancia = distanciaCoord(latidudSucu, longitudSucu, ingresarPedido.getLatitudUsuario(), ingresarPedido.getLingitudUsuario());
         codigoSucu = sucursalServicio.codigoPorNombre(ingresarPedido.getSucursalNombre());
+        usua = clienteServicio.buscarPorCedula(ingresarPedido.getCedulaUsuario());
 
         correo = ingresarPedido.getCorreoUsuario();
 
@@ -413,7 +418,7 @@ public class ControladorPedido {
         System.out.println("Subtotal de Factura es: " + precioTotal);
         fac.setFechaFactura(new Date());
         fac.setCuentaFactura(cue);
-        fac.setUsuarioFactura(cue.getUsuario());
+        fac.setUsuarioFactura(usua);
         fac.setTipoPago(new TipoPago(1, "Corriente"));
         fac.setFacturadetalle(detalles);
         fac.setEstadoFactura(true);
