@@ -39,6 +39,17 @@ public class IngresarPedido {
     @JsonProperty
     private int stock;
 
+    @JsonProperty
+    private String cedulaUsuario;
+
+    public String getCedulaUsuario() {
+        return cedulaUsuario;
+    }
+
+    public void setCedulaUsuario(String cedulaUsuario) {
+        this.cedulaUsuario = cedulaUsuario;
+    }
+
     public int getStock() {
         return stock;
     }
