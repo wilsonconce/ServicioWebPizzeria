@@ -41,23 +41,27 @@ public class ControladorCliente {
         this.cuentaServicio = cuentaServicio;
     }
     @PostMapping("/cliente/registrar")
-    public ResponseEntity<Usuario> createCliente(@RequestBody RegistraCliente registraCliente){
-        TipoUsuario tipoUsuario=tipoUsuarioServicio.findbyCodigo(3);
-        Usuario usuario=new Usuario();
-        usuario.setCedula(registraCliente.getCedula());
-        usuario.setNombre(registraCliente.getNombre());
-        usuario.setApellido(registraCliente.getApellido());
-        usuario.setFechaNacimiento(registraCliente.getFechaNacimiento());
-        usuario.setTipoUsuario(tipoUsuario);
-        Cuenta cuenta=new Cuenta();
-        cuenta.setCorreo(registraCliente.getCorreo());
-        cuenta.setContrasena(registraCliente.getContrasena());
-        cuenta.setUsuario(usuario);
-        usuario.setCuenta(cuenta);
+    public ResponseEntity<String> createCliente(@RequestBody RegistraCliente registraCliente){
+        Optional<Usuario>usuario=clienteServicio.findByCedula(registraCliente.getCedula());
 
-        System.out.println(usuario);
-        clienteServicio.save(usuario);
-        return ResponseEntity.ok(usuario);
+        if(usuario.isEmpty()){
+            return new ResponseEntity<String>("Usuario no existe", HttpStatus.OK);
+        }
+        if(usuario.get().getCuenta()!=null){
+            return new ResponseEntity<String>("Usuario ya tiene cuenta existente", HttpStatus.OK);
+    }
+        else {
+            Usuario usu = usuario.get();
+            Cuenta cuenta = new Cuenta();
+            cuenta.setCorreo(registraCliente.getCorreo());
+            cuenta.setContrasena(registraCliente.getContrasena());
+            cuenta.setUsuario(usu);
+            usu.setCuenta(cuenta);
+
+            System.out.println(usuario);
+            clienteServicio.save(usu);
+            return new ResponseEntity<String>("Cuenta Registrada Correctamente", HttpStatus.OK);
+        }
 
     }
     @PutMapping("/cuenta/edit")
@@ -67,6 +71,7 @@ public class ControladorCliente {
             return ResponseEntity.badRequest().build();
         }
         Cuenta cuenta=cuentaOptional.get();
+        cuenta.setCorreo(modificarCuenta.getCorreo());
         cuenta.setContrasena(modificarCuenta.getContrasena());
         this.cuentaServicio.save(cuenta);
         return ResponseEntity.ok(cuenta);

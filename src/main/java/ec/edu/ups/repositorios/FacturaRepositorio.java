@@ -7,7 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface FacturaRepositorio extends CrudRepository<Factura,Integer> {
 
-    @Query("SELECT f FROM Factura f inner join Pedido p on(p.pedidoFactura=f.codigoFactura) WHERE p.idPedido =:codigo")
+    @Query("SELECT f  FROM Factura f WHERE f.codigoFactura=:codigo")
     Factura buscarFacturaPorPedido(int codigo);
 
 

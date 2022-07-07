@@ -492,7 +492,7 @@ public class ControladorPedido {
 
         }
         pe = pedidoServicio.buscaPedidoPorCodigo(codigo);
-        f = facturaServicio.buscarFacturaPorPedidoCodigo(codigo);
+        f = facturaServicio.buscarFacturaPorPedidoCodigo(pe.getPedidoFactura().getCodigoFactura());
 
         System.out.println("Despues del for ");
         pe.setEstado(EstadoPedido.CANCELADO);

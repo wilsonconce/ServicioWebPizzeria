@@ -8,6 +8,8 @@ public class ModificarCuenta {
     private int codigoCuenta;
     @JsonProperty
     private String contrasena;
+    @JsonProperty
+    private String correo;
 
     public ModificarCuenta() {
     }
@@ -24,7 +26,16 @@ public class ModificarCuenta {
         return contrasena;
     }
 
+
     public void setContrasena(String contrasena) {
         this.contrasena = contrasena;
+    }
+
+    public String getCorreo() {
+        return correo;
+    }
+
+    public void setCorreo(String correo) {
+        this.correo = correo;
     }
 }
