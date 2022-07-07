@@ -10,4 +10,7 @@ public interface PedidoRepositorio extends CrudRepository<Pedido, Integer> {
 
 @Query("SELECT u FROM Pedido u WHERE u.idPedido =:codigo")
     Optional <Pedido> buscarPedidoID(int codigo);
+
+    @Query("SELECT u FROM Pedido u WHERE u.idPedido =:codigo")
+    Pedido buscarPorCodigo(int codigo);
 }

@@ -9,10 +9,7 @@ import jdk.jfr.Timespan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.Convert;
 import java.sql.Time;
@@ -71,6 +68,8 @@ public class ControladorPedido {
     List<PedidoDetalle> pedidoDetalles = new ArrayList<>();
     List<PedidoDetalle> pedidodetallesVista = new ArrayList<>();
     List<Factura> facturas = new ArrayList<>();
+    Producto p = new Producto();
+
 
     public double getLatidudSucu() {
         return latidudSucu;
@@ -237,18 +236,16 @@ public class ControladorPedido {
 
         DetalleFactura detalleFactura = new DetalleFactura();
         PedidoDetalle pedidoDetalle = new PedidoDetalle();
-        Producto producto = new Producto();
 
         codigoPro = productoServicio.codigoPorNombre(ingresarPedidoDetalle.getNombreProducto());
-        descripcion = ingresarPedidoDetalle.getDescripcion();
+        descripcion = ingresarPedidoDetalle.getNombreProducto();
         cantidad = ingresarPedidoDetalle.getCantidad();
         precioUnitario = productoServicio.precioPorID(codigoPro);
         stock = productoServicio.stockPorId(codigoPro);
 
         if (productos != null) {
-
-            producto = productoServicio.retriveProductoByNombre(productos);
-            System.out.println("El producto es: !!!!  " + producto.getNombre());
+            p = productoServicio.retriveProductoByNombre(productos);
+            System.out.println("El producto es: !!!!  " + p.getNombre());
 
         }
         //Probando hasta donde llega
@@ -268,27 +265,28 @@ public class ControladorPedido {
         System.out.println("Precio unitario del producto es: " + precioUnitario);
 
 
-        //System.out.println("El pinche codigo del producto es: " + codigoPro);
+        System.out.println("El pinche codigo del producto es: " + codigoPro);
         System.out.println("EL precio del producto unitario es: " + precioUnitario);
         System.out.println("Precio Total = " + precioTotal);
 
 
-        pedidoDetalle.setDescripcion(descripcion);
-        pedidoDetalle.setProducto(producto);
+        pedidoDetalle.setDescripcion(ingresarPedidoDetalle.getNombreProducto());
+        pedidoDetalle.setProducto(productoServicio.productoPorCodigo(codigoPro));
         pedidoDetalle.setCantidad(cantidad);
         pedidoDetalle.setPrecioUnitario(precioUnitario);
         pedidoDetalle.setPrecioTotal(precioTotal);
         pedidoDetalles.add(pedidoDetalle);
 
+        //pedidodetallesVista.add(pedidoDetalle);
 
         detalleFactura.setCantidad(cantidad);
         detalleFactura.setDescripcion(descripcion);
         detalleFactura.setPrecioUnitario(precioUnitario);
         detalleFactura.setPrecioTotal(precioTotal);
-        detalleFactura.setProducto(producto);
+        detalleFactura.setProducto(productoServicio.retriveProductoByNombre(ingresarPedidoDetalle.getNombreProducto()));
 
         for (int i = 0; i < detalles.size(); i++) {
-            subtotal = subtotal + detalles.get(i).getPrecioTotal();
+            precioTotal = precioTotal + detalles.get(i).getPrecioTotal();
             System.out.println("*******TOTAL *** : " + subtotal);
         }
         iva = (precioTotal * 0.12);
@@ -355,14 +353,10 @@ public class ControladorPedido {
         System.out.println("Latidud es: " + latidudSucu + "Longitus ES: " + longitudSucu);
         System.out.println("***********");
         System.out.println("La distancia entre sucursal y cliente es: " + distancia);
-        formulaTiempo = (distancia/25)*60;
+        formulaTiempo = (distancia / 25) * 60;
 
 
-
-
-       // TimeSpan ts = new TimeSpan(hours, minutes, seconds);
-
-
+        // TimeSpan ts = new TimeSpan(hours, minutes, seconds);
 
 
         ingresarPedido.setDistancia(distancia);
@@ -423,34 +417,47 @@ public class ControladorPedido {
         fac.setTipoPago(new TipoPago(1, "Corriente"));
         fac.setFacturadetalle(detalles);
         fac.setEstadoFactura(true);
-
         fac.setSubtotal(precioTotal);
         fac.setIva(iva);
         fac.setTotal(total);
-        System.out.println(fac);
-        System.out.println("Puto COdigo de factura: "+fac.getCodigoFactura());
+
+
         pedido.setPedidoFactura(fac);
         pedidoServicio.savePedido(pedido);
         facturaServicio.save(fac);
 
-        System.out.println("Stock Actual"+stock);
-        System.out.println("Total de Factura" +total);
+        System.out.println("Stock Actual" + stock);
+        System.out.println("Total de Factura" + total);
+        p.setStock(stock);
+
+        System.out.println(detalles);
+        System.out.println("descripcion: " + descripcion);
         for (int i = 0; i < detalles.size(); i++) {
-            detalles.get(i).setFacturadetalle(fac);
-            Producto p = new Producto();
+
             p = productoServicio.retriveProductoByNombre(detalles.get(i).getDescripcion());
-            stock = ingresarPedido.getStock();
+            //System.out.println("ques es esto? "+productoServicio.retriveProductoByNombre(detalles.get(i).getDescripcion()));
+
+            detalles.get(i).setFacturadetalle(fac);
+
+            System.out.println("Imprimiendo p adentro del For " + p);
+
+            p.setStock(p.getStock() - detalles.get(i).getCantidad());
+
             facturaDetalleServicio.save(detalles.get(i));
-            p.setStock(p.getStock()-cantidad);
+
             productoServicio.save(p);
-            System.out.println("NOmbre Producto: "+productoServicio.retriveProductoByNombre(detalles.get(i).getDescripcion()));
-            System.out.println("stock "+stock );
+            //System.out.println("Nombre Producto: " + productoServicio.retriveProductoByNombre(detalles.get(i).getDescripcion()));
+            System.out.println("stock " + p.getStock());
 
         }
-        System.out.println("Stock despues del for " +stock);
+       // pedidoDetalles.removeAll(pedidodetallesVista);
+
+        System.out.println("Probando si se elimino la lista "+pedidoDetalles);
+        System.out.println("Probando si se elimino la lista X2 ******"+pedidodetallesVista);
+
+        System.out.println("Stock despues del for " + stock);
 
 
-        //System.out.println("cuenta correo: "+cuentaServicio.buscarCuentaPorCorreo(correo));
         return ResponseEntity.ok(pedido);
     }
 
@@ -461,5 +468,38 @@ public class ControladorPedido {
 
         return new ResponseEntity<List<Pedido>>(listapedido, HttpStatus.OK);
 
+    }
+
+    @DeleteMapping("/pedido/eliminar/{codigo}")
+    public ResponseEntity<String> eliminarPedido(@PathVariable Integer codigo) {
+        Pedido pe = new Pedido();
+        Factura f = new Factura();
+        Producto p = new Producto();
+
+
+        System.out.println("Imprimiendo antes del for " + stock);
+        System.out.println("Imprimiento el get del producto " + p.getStock());
+
+        for (int i = 0; i < detalles.size(); i++) {
+            p = productoServicio.retriveProductoByNombre(detalles.get(i).getDescripcion());
+            stock = p.getStock() + detalles.get(i).getCantidad();
+            p.setStock(stock);
+            productoServicio.save(p);
+            System.out.println("Comprobando si regresa el stock");
+            System.out.println("stock Eliminar: " + stock);
+
+            System.out.println("Producto adentro del bucle " + p);
+
+        }
+        pe = pedidoServicio.buscaPedidoPorCodigo(codigo);
+        f = facturaServicio.buscarFacturaPorPedidoCodigo(codigo);
+
+        System.out.println("Despues del for ");
+        pe.setEstado(EstadoPedido.CANCELADO);
+        f.setEstadoFactura(false);
+        pedidoServicio.savePedido(pe);
+        facturaServicio.save(f);
+
+        return ResponseEntity.ok("Pedido Eliminada correctamente");
     }
 }

@@ -17,6 +17,9 @@ public class PedidoServicio {
     public List<Pedido> findAll(){
         return (List<Pedido>) pedidoRepositorio.findAll();
     }
+    public Pedido buscaPedidoPorCodigo(int codigo){
+        return (Pedido) pedidoRepositorio.buscarPorCodigo(codigo);
+    }
 
     public void savePedido(Pedido pedido){
     pedidoRepositorio.save(pedido);

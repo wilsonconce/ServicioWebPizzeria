@@ -3,6 +3,7 @@ package ec.edu.ups.entidades;
 public enum EstadoPedido {
     ENVIADO("Enviado"),
     RECEPTADO("Receptado"),
+    CANCELADO("Cancelado"),
     EN_PROCESO("En proceso"),
     EN_CAMINO("En caminado"),
     FINALIZADO("Finalizado");
