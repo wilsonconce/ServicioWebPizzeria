@@ -19,7 +19,7 @@ public class ProductoServicio {
 
 
     public Producto retriveProductoByNombre(String nombre){
-        return (Producto) productoRepositorio.findProductoByNombre(nombre);
+        return  (Producto) productoRepositorio.findProductoByNombre(nombre);
     }
 
     public Double precioPorID(Integer codigoPr){
