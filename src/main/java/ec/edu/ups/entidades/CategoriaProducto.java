@@ -1,4 +1,6 @@
 package ec.edu.ups.entidades;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
@@ -19,6 +21,7 @@ public class CategoriaProducto implements Serializable {
     private String descripcion;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "categoria", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Producto> productos;
 
     public CategoriaProducto() {

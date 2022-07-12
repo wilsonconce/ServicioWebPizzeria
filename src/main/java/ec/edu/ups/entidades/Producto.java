@@ -30,7 +30,7 @@ public class Producto implements Serializable {
 
     @ManyToOne
     @JoinColumn
-    @JsonIgnore
+
     private CategoriaProducto categoria;
 
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "producto")
@@ -41,6 +41,7 @@ public class Producto implements Serializable {
     @JsonIgnore
     private PedidoDetalle detallePedido;
 
+    private String urlimage;
     @JoinTable(name = "productos_sucursal", joinColumns = {
             @JoinColumn(name = "codigoProducto", referencedColumnName = "codigoProducto")}, inverseJoinColumns = {
             @JoinColumn(name = "codigo_sucursal", referencedColumnName = "codigo")
@@ -145,6 +146,14 @@ public class Producto implements Serializable {
         this.detallePedido = detallePedido;
     }
 
+    public String getUrlimage() {
+        return urlimage;
+    }
+
+    public void setUrlimage(String urlimage) {
+        this.urlimage = urlimage;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -164,6 +173,6 @@ public class Producto implements Serializable {
         if (this.categoria != null) {
             u = ", Categoria=(" + this.categoria.getCodigoCategoria() + ")";
         }
-        return "Producto{" + "codigoProducto=" + codigoProducto + ", nombre=" + nombre + ", descripcion=" + descripcion + ", precio=" + precio + ", stock=" + stock + u + ", detalleFactura=" + detalleFactura + '}';
+        return "Producto{" + "codigoProducto=" + codigoProducto + ", nombre=" + nombre + ", descripcion=" + descripcion + ", precio=" + precio + ", stock=" + stock + u + ", detalleFactura=" + detalleFactura + ", urlimage"+urlimage+'}';
     }
 }

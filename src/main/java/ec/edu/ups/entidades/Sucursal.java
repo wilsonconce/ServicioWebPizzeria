@@ -1,5 +1,7 @@
 package ec.edu.ups.entidades;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +22,7 @@ public class Sucursal implements Serializable{
     private double latencia;
     private double longitud;
 
-
+    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL, mappedBy = "sucursal")
     private List<Pedido> pedido = new ArrayList<Pedido>();
 

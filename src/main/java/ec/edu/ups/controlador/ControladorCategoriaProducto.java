@@ -5,12 +5,13 @@ import ec.edu.ups.servicio.CategoriaProductoServicio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-
+@CrossOrigin
 @RestController
 public class ControladorCategoriaProducto {
 
@@ -35,10 +36,10 @@ public class ControladorCategoriaProducto {
         return new ResponseEntity<String>(nombre, HttpStatus.OK);
     }
 
-    @GetMapping("/categorias/nombres")
-    public ResponseEntity<List<String>> getAllCategoriasNombres(){
-        List<String> listaCategoriasNombres = categoriaProductoServicio.retriveAllNombres();
-        return new ResponseEntity<List<String>>(listaCategoriasNombres, HttpStatus.OK);
+    @GetMapping("/categorias")
+    public ResponseEntity<List<CategoriaProducto>> getAllCategoriasNombres(){
+        List<CategoriaProducto> listaCategorias = categoriaProductoServicio.retriveAllNombres();
+        return new ResponseEntity<List<CategoriaProducto>>(listaCategorias, HttpStatus.OK);
     }
 
 
