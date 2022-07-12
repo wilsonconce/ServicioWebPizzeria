@@ -26,8 +26,8 @@ public class CategoriaProductoServicio {
         return (String) categoriaProductoRepositorio.findCategoriaProductoNombreByCodigo(codigo);
     }
 
-    public List<String> retriveAllNombres(){
-        return (List<String>) categoriaProductoRepositorio.findAllNombres();
+    public List<CategoriaProducto> retriveAllNombres(){
+        return (List<CategoriaProducto>) categoriaProductoRepositorio.findAllNombres();
     }
 
 

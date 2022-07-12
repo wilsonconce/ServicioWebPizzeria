@@ -15,8 +15,8 @@ public interface CategoriaProductoRepositorio extends CrudRepository<CategoriaPr
     @Query("select cp.codigoCategoria, cp.nombre from CategoriaProducto cp where cp.codigoCategoria =:codigoCategoria")
     String findCategoriaProductoNombreByCodigo(int codigoCategoria);
 
-    @Query("select cp.nombre from CategoriaProducto cp")
-    List<String> findAllNombres();
+    @Query("select cp from CategoriaProducto cp")
+    List<CategoriaProducto> findAllNombres();
 
 
 }

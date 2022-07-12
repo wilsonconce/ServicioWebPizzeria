@@ -1,6 +1,7 @@
 package ec.edu.ups.servicio;
 
 import ec.edu.ups.entidades.Cuenta;
+import ec.edu.ups.entidades.Producto;
 import ec.edu.ups.entidades.Sucursal;
 import ec.edu.ups.repositorios.SucursalRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
