@@ -2,6 +2,7 @@ package ec.edu.ups.controlador;
 
 import com.sun.xml.bind.v2.model.core.EnumLeafInfo;
 import ec.edu.ups.entidades.*;
+import ec.edu.ups.entidades.peticiones.pedido.EditarCarrito;
 import ec.edu.ups.entidades.peticiones.pedido.IngresarPedido;
 import ec.edu.ups.entidades.peticiones.pedido.IngresarPedidoDetalle;
 import ec.edu.ups.servicio.*;
@@ -50,7 +51,7 @@ public class ControladorPedido {
     private double subtotal;
     private double total;
 
-    private int codigoPro;
+
 
     private int stock;
 
@@ -122,13 +123,6 @@ public class ControladorPedido {
         this.stock = stock;
     }
 
-    public int getCodigoPro() {
-        return codigoPro;
-    }
-
-    public void setCodigoPro(int codigoPro) {
-        this.codigoPro = codigoPro;
-    }
 
     public String getProductos() {
         return productos;
@@ -239,18 +233,14 @@ public class ControladorPedido {
 
         DetalleFactura detalleFactura = new DetalleFactura();
         PedidoDetalle pedidoDetalle = new PedidoDetalle();
-
-        codigoPro = productoServicio.codigoPorNombre(ingresarPedidoDetalle.getNombreProducto());
-        descripcion = ingresarPedidoDetalle.getNombreProducto();
+        Producto pr = productoServicio.retriveProductoByNombre(ingresarPedidoDetalle.getNombreProducto());
+//        codigoPro = productoServicio.codigoPorNombre(ingresarPedidoDetalle.getNombreProducto());
+        descripcion = pr.getNombre();
         cantidad = ingresarPedidoDetalle.getCantidad();
-        precioUnitario = productoServicio.precioPorID(codigoPro);
-        stock = productoServicio.stockPorId(codigoPro);
+        precioUnitario = pr.getPrecio();
+        stock = pr.getStock();
 
-        if (productos != null) {
-            p = productoServicio.retriveProductoByNombre(productos);
-            System.out.println("El producto es: !!!!  " + p.getNombre());
 
-        }
         //Probando hasta donde llega
 
         System.out.println(" pRODUCRTTO STOCK: " + stock);
@@ -268,13 +258,12 @@ public class ControladorPedido {
         System.out.println("Precio unitario del producto es: " + precioUnitario);
 
 
-        System.out.println("El pinche codigo del producto es: " + codigoPro);
         System.out.println("EL precio del producto unitario es: " + precioUnitario);
         System.out.println("Precio Total = " + precioTotal);
 
 
         pedidoDetalle.setDescripcion(ingresarPedidoDetalle.getNombreProducto());
-        pedidoDetalle.setProducto(productoServicio.productoPorCodigo(codigoPro));
+        //pedidoDetalle.setProducto(productoServicio.productoPorCodigo(codigoPro));
         pedidoDetalle.setCantidad(cantidad);
         pedidoDetalle.setPrecioUnitario(precioUnitario);
         pedidoDetalle.setPrecioTotal(precioTotal);
@@ -286,7 +275,7 @@ public class ControladorPedido {
         detalleFactura.setDescripcion(descripcion);
         detalleFactura.setPrecioUnitario(precioUnitario);
         detalleFactura.setPrecioTotal(precioTotal);
-        detalleFactura.setProducto(productoServicio.retriveProductoByNombre(ingresarPedidoDetalle.getNombreProducto()));
+        //detalleFactura.setProducto(productoServicio.retriveProductoByNombre(ingresarPedidoDetalle.getNombreProducto()));
 
         for (int i = 0; i < detalles.size(); i++) {
             precioTotal = precioTotal + detalles.get(i).getPrecioTotal();
@@ -308,6 +297,87 @@ public class ControladorPedido {
 
         return ResponseEntity.ok(pedidoDetalle);
 
+
+    }
+
+    @PostMapping("/pedido/editarCarrito")
+    public ResponseEntity<String> editarCarrito(@RequestBody EditarCarrito editarCarrito) throws ParseException{
+        double precio=0;
+
+        for (int i = 0; i < pedidoDetalles.size(); i++) {
+
+            if(pedidoDetalles.get(i).getDescripcion().equals(editarCarrito.getNombre())){
+
+                pedidoDetalles.get(i).setCantidad(editarCarrito.getCantidad());
+                pedidoDetalles.get(i).setPrecioTotal(pedidoDetalles.get(i).getCantidad()*pedidoDetalles.get(i).getPrecioUnitario());
+                System.out.println(pedidoDetalles.get(i));
+            }
+
+        }
+
+
+
+        for (int i = 0; i < detalles.size(); i++) {
+            if (detalles.get(i).getDescripcion().equals(editarCarrito.getNombre())) {
+                detalles.get(i).setCantidad(editarCarrito.getCantidad());
+                detalles.get(i).setPrecioTotal(detalles.get(i).getCantidad() * detalles.get(i).getPrecioUnitario());
+            }
+        }
+        for (int i = 0; i < detalles.size(); i++) {
+            precio = precio + detalles.get(i).getPrecioTotal();
+
+        }
+
+        precioTotal = precio;
+        iva=0.00;
+        iva =(precio*0.12);
+        total=0.00;
+        total = (precioTotal + iva);
+
+        return new ResponseEntity<String>("Editado Correctamente",HttpStatus.OK);
+    }
+
+    @DeleteMapping("/pedido/eliminarCarrito/{nombreProduc}")
+    public ResponseEntity<String> deleteProd(@PathVariable String nombreProduc){
+        double precio=0;
+
+        for (int i = 0; i < pedidoDetalles.size(); i++) {
+
+            if(pedidoDetalles.get(i).getDescripcion().equals(nombreProduc)){
+
+              pedidoDetalles.remove(i);
+            }
+
+        }
+
+
+
+        for (int i = 0; i < detalles.size(); i++) {
+            if (detalles.get(i).getDescripcion().equals(nombreProduc)) {
+                detalles.remove(i);
+            }
+        }
+        for (int i = 0; i < detalles.size(); i++) {
+            precio = precio + detalles.get(i).getPrecioTotal();
+
+        }
+
+        precioTotal = precio;
+        iva=0.00;
+        iva =(precio*0.12);
+        total=0.00;
+        total = (precioTotal + iva);
+        return new ResponseEntity<String> ("Pedido Eliminada correctamente",HttpStatus.OK);
+    }
+
+
+    @GetMapping("/pedido/listarCarrito")
+
+    public ResponseEntity<List<PedidoDetalle>> getCarrito(){
+
+        List<PedidoDetalle> lista=pedidoDetalles;
+
+        return  new ResponseEntity<List<PedidoDetalle>>(lista,HttpStatus.OK);
 
     }
 
@@ -455,6 +525,31 @@ public class ControladorPedido {
             System.out.println("stock " + p.getStock());
 
         }
+
+        p= new Producto();
+        detalles=new ArrayList<>();
+        detallesvista = new ArrayList<>();
+        pedidoDetalles = new ArrayList<>();
+        pedidodetallesVista = new ArrayList<>();
+
+        cantidad=0;
+        stock=0;
+        precioTotal=0.00;
+        precioUnitario=0.00;
+
+        codigoSucu=0;
+
+        latidudSucu=0;
+        longitudSucu=0;
+        distancia=0.00;
+        correo="";
+        productos="";
+
+        descripcion="";
+        total=0.00;
+        subtotal=0.00;
+        iva=0.00;
+
        // pedidoDetalles.removeAll(pedidodetallesVista);
 
         System.out.println("Probando si se elimino la lista "+pedidoDetalles);
