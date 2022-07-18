@@ -576,13 +576,16 @@ public class ControladorPedido {
         Pedido pe = new Pedido();
         Factura f = new Factura();
         Producto p = new Producto();
+        detalles=new ArrayList<>();
 
 
         System.out.println("Imprimiendo antes del for " + stock);
         System.out.println("Imprimiento el get del producto " + p.getStock());
-
+        pe = pedidoServicio.buscaPedidoPorCodigo(codigo);
+        f = facturaServicio.buscarFacturaPorPedidoCodigo(pe.getPedidoFactura().getCodigoFactura());
+        detalles=f.getFacturadetalle();
         for (int i = 0; i < detalles.size(); i++) {
-
+            stock=0;
             p = productoServicio.retriveProductoByNombre(detalles.get(i).getDescripcion());
             stock=p.getStock();
             stock = stock + detalles.get(i).getCantidad();
@@ -594,8 +597,6 @@ public class ControladorPedido {
             System.out.println("Producto adentro del bucle " + p);
 
         }
-        pe = pedidoServicio.buscaPedidoPorCodigo(codigo);
-        f = facturaServicio.buscarFacturaPorPedidoCodigo(pe.getPedidoFactura().getCodigoFactura());
 
         System.out.println("Despues del for ");
         pe.setEstado(EstadoPedido.CANCELADO);
