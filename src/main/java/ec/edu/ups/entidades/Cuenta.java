@@ -121,14 +121,18 @@ public class Cuenta implements Serializable {
     public String toString() {
         String u = ",usuario=(null)";
         String p = ", pedido=(null)";
+        String a=", tarjetaC=(null)";
         if (this.pedido != null) {
             p = ", pedido=" + this.pedido.toString() + ")";
         }
         if (this.usuario != null) {
             u = ",UsuarioId=(" + this.usuario.getCedula() + ")";
         }
+        if (this.usuario != null) {
+            a = ",tarjetaC=(" + this.tarjetaC.toString() + ")";
+        }
         return "Cuenta{" + "correo=" + correo + ", contrasena=" + contrasena + u +
-                ", tarjetaC=" + tarjetaC + p + '}';
+                a + p + '}';
     }
 
 

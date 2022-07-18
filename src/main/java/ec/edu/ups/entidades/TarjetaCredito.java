@@ -35,6 +35,14 @@ public class TarjetaCredito {
         this.cuenta = cuenta;
     }
 
+    public int getIdTarjeta() {
+        return idTarjeta;
+    }
+
+    public void setIdTarjeta(int idTarjeta) {
+        this.idTarjeta = idTarjeta;
+    }
+
     public String getNumeroTarjeta() {
         return numeroTarjeta;
     }
@@ -75,5 +83,15 @@ public class TarjetaCredito {
         this.cuenta = cuenta;
     }
 
+    @Override
+    public String toString() {
+        return "TarjetaCredito{" +
+                "idTarjeta=" + idTarjeta +
+                ", numeroTarjeta='" + numeroTarjeta + '\'' +
+                ", fechaCa=" + fechaCa +
+                ", codigoSegu='" + codigoSegu + '\'' +
+                ", nombreTarj='" + nombreTarj + '\'' +
+                '}';
+    }
 }
 

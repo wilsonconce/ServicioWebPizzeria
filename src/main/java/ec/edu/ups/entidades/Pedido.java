@@ -137,6 +137,10 @@ public class Pedido implements Serializable{
 
     }
 
+    public EstadoPedido getEstado() {
+        return estado;
+    }
+
     @Override
     public String toString() {
         String s =",sucursal==(null)";
@@ -151,7 +155,7 @@ public class Pedido implements Serializable{
         if (this.cuentaPedido != null) {
             c = ", Cuenta=(" + this.cuentaPedido.getCodigoCuenta() + ")";
         }
-        return "Pedido{" + "idPedido=" + idPedido + ", tiempoAprox=" + tiempoAprox + ", estado=" + estado + s + ", distanciaRecorrido=" + distanciaRecorrido + ", costoEnvio=" + costoEnvio  + c + d+'}';
+        return "Pedido{" + "idPedido=" + idPedido + ", tiempoAprox=" + tiempoAprox + ", estado=" + estado.toString() + s + ", distanciaRecorrido=" + distanciaRecorrido + ", costoEnvio=" + costoEnvio  + c + d+'}';
     }
 
 

@@ -21,6 +21,7 @@ public class PedidoServicio {
         return (Pedido) pedidoRepositorio.buscarPorCodigo(codigo);
     }
 
+    public List<Pedido> pedidosPorCuenta(int codigo){return  (List<Pedido>)pedidoRepositorio.buscarPorCuenta(codigo);}
     public void savePedido(Pedido pedido){
     pedidoRepositorio.save(pedido);
     }

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin(origins = "*")
 @RestController
 public class ControladorCliente {
 
@@ -82,5 +83,12 @@ public class ControladorCliente {
         List<Usuario> listapersonas=clienteServicio.findAll();
 
         return new ResponseEntity<List<Usuario>>(listapersonas, HttpStatus.OK);
+    }
+    @GetMapping("/cliente/{cedula}")
+    public ResponseEntity<Usuario> getPersona(@PathVariable String cedula){
+
+        Usuario usu=clienteServicio.buscarPorCedula(cedula);
+
+        return new ResponseEntity<Usuario>(usu, HttpStatus.OK);
     }
 }

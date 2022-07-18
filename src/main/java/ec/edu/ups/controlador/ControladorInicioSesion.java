@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
-
+@CrossOrigin(origins = "*")
 @RestController
 public class ControladorInicioSesion {
 
@@ -19,18 +19,21 @@ public class ControladorInicioSesion {
     public void setCuentaServicio(CuentaServicio cuentaServicio) {
         this.cuentaServicio = cuentaServicio;
     }
-    @GetMapping("/iniciarsesion")
-    public ResponseEntity<String> iniciarSesion(@RequestBody IniciarSesion iniciarSesion){
+    @PostMapping("/iniciarsesion")
+    public ResponseEntity<Cuenta> iniciarSesion(@RequestBody IniciarSesion iniciarSesion){
         Optional<Cuenta> cuentaOptional= (Optional<Cuenta>)(cuentaServicio.findByCorreo(iniciarSesion.getCorreo()));
         if(cuentaOptional.isEmpty()){
-            return new ResponseEntity<String>("Corrreo incorrecto", HttpStatus.OK);
+            System.out.println("Correo incorrecto");
+            return new ResponseEntity<Cuenta>(HttpStatus.NOT_FOUND);
         }
         Cuenta cuenta=cuentaOptional.get();
-        if(cuenta.getContrasena().equals(iniciarSesion.getContrasena())){
-            return new ResponseEntity<String>("Usuario Logueado Correctamente", HttpStatus.OK);
+        if(cuenta.getContrasena().equals(iniciarSesion.getContrasena())&& cuenta.getUsuario().getTipoUsuario().getDescripcion().equals("Cliente")){
+            System.out.println("Usuario Logueado Correctamente");
+            return new ResponseEntity<Cuenta>(cuenta, HttpStatus.OK);
         }
         else {
-            return new ResponseEntity<String>("Password Incorrecto", HttpStatus.OK);
+            System.out.println("Contraseña Incorrecta");
+            return new ResponseEntity<Cuenta>(HttpStatus.NOT_FOUND);
         }
     }
 }

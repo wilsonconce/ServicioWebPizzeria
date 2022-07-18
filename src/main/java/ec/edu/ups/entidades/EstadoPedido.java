@@ -18,4 +18,10 @@ public enum EstadoPedido {
         return etiqueta;
     }
 
+    @Override
+    public String toString() {
+        return "EstadoPedido{" +
+                "etiqueta='" + etiqueta + '\'' +
+                '}';
+    }
 }

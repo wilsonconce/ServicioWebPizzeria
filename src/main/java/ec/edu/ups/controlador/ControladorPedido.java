@@ -22,6 +22,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin(origins = "*")
 @RestController
 public class ControladorPedido {
 
@@ -561,10 +562,10 @@ public class ControladorPedido {
         return ResponseEntity.ok(pedido);
     }
 
-    @GetMapping("/pedido/listar")
-    ResponseEntity<List<Pedido>> getAllPedidos() {
+    @GetMapping("/pedido/listar/{codigo}")
+    ResponseEntity<List<Pedido>> getPedidosCuenta(@PathVariable Integer codigo) {
 
-        List<Pedido> listapedido = pedidoServicio.findAll();
+        List<Pedido> listapedido = pedidoServicio.pedidosPorCuenta(codigo);
 
         return new ResponseEntity<List<Pedido>>(listapedido, HttpStatus.OK);
 
@@ -581,8 +582,10 @@ public class ControladorPedido {
         System.out.println("Imprimiento el get del producto " + p.getStock());
 
         for (int i = 0; i < detalles.size(); i++) {
+
             p = productoServicio.retriveProductoByNombre(detalles.get(i).getDescripcion());
-            stock = p.getStock() + detalles.get(i).getCantidad();
+            stock=p.getStock();
+            stock = stock + detalles.get(i).getCantidad();
             p.setStock(stock);
             productoServicio.save(p);
             System.out.println("Comprobando si regresa el stock");
@@ -599,6 +602,7 @@ public class ControladorPedido {
         f.setEstadoFactura(false);
         pedidoServicio.savePedido(pe);
         facturaServicio.save(f);
+        stock=0;
 
         return ResponseEntity.ok("Pedido Eliminada correctamente");
     }
